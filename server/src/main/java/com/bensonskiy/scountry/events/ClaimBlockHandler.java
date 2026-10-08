@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ public class ClaimBlockHandler {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
         if (!event.getPlacedBlock().is(Blocks.STRUCTURE_VOID)) return;
 
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
 
         String name = player.getGameProfile().getName();

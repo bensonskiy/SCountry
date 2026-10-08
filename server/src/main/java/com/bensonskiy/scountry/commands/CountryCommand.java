@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.commands;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import com.bensonskiy.scountry.events.BorderViewHandler;
@@ -362,7 +363,7 @@ public class CountryCommand {
 
     // ==================== HELPERS ====================
 
-    private static CountryManager mgr() { return SCountry.countryManager; }
+    private static CountryManager mgr() { return SCountryServer.countryManager; }
 
     private static ServerPlayer player(CommandContext<CommandSourceStack> ctx) {
         return ctx.getSource().getEntity() instanceof ServerPlayer p ? p : null;
@@ -691,7 +692,7 @@ public class CountryCommand {
     }
 
     private static void showCitizenshipMenu(ServerPlayer p) {
-        CountryManager m = SCountry.countryManager;
+        CountryManager m = SCountryServer.countryManager;
         if (m == null) return;
         String pname = p.getGameProfile().getName();
         String uuid = p.getUUID().toString();

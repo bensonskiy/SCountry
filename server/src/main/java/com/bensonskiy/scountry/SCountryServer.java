@@ -6,6 +6,7 @@ import com.bensonskiy.scountry.data.CountryManager;
 import com.bensonskiy.scountry.events.*;
 import com.bensonskiy.scountry.network.CountryDTO;
 import com.bensonskiy.scountry.network.CountrySyncPacket;
+import com.bensonskiy.scountry.network.CountrySyncBuilder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -48,7 +49,7 @@ public class SCountryServer {
 
     private void onServerTick(ServerTickEvent.Post event) {
         if (CountryManager.consumeDirty()) {
-            PacketDistributor.sendToAllPlayers(CountrySyncPacket.collect());
+            PacketDistributor.sendToAllPlayers(CountrySyncBuilder.collect());
         }
     }
 
@@ -93,10 +94,14 @@ public class SCountryServer {
         d.modSettings = new java.util.HashMap<>(c.modSettings);
         c.customRoles.forEach((k, v) -> d.customRoles.put(k, new java.util.HashMap<>(v)));
         for (String s : c.chunks) {
-            String[] parts = s.split(";");
+            String[] parts = s.split(";", -1);
             if (parts.length == 3 && "overworld".equals(parts[0])) {
-                long x = Integer.parseInt(parts[1]), z = Integer.parseInt(parts[2]);
-                d.chunkKeys.add((x << 32) | (z & 0xFFFFFFFFL));
+                try {
+                    long x = Integer.parseInt(parts[1]), z = Integer.parseInt(parts[2]);
+                    d.chunkKeys.add((x << 32) | (z & 0xFFFFFFFFL));
+                } catch (NumberFormatException ignored) {
+                    SCountry.LOGGER.warn("[SCountry] Пропущен повреждённый chunk key: {}", s);
+                }
             }
         }
         return d;

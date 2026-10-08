@@ -55,7 +55,7 @@ public class SCountryServer {
 
     private void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer p) {
-            PacketDistributor.sendToPlayer(p, CountrySyncPacket.collect());
+            PacketDistributor.sendToPlayer(p, CountrySyncBuilder.collect());
         }
     }
 

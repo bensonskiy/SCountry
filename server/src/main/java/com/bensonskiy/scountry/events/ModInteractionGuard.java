@@ -2,6 +2,7 @@ package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.Config;
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.core.BlockPos;
@@ -25,7 +26,7 @@ public final class ModInteractionGuard {
         try {
             if (player == null || pos == null) return true;
             if (player.hasPermissions(2)) return true;
-            CountryManager mgr = SCountry.countryManager;
+            CountryManager mgr = SCountryServer.countryManager;
             if (mgr == null) return true;
 
             String key = forcedKey;
@@ -61,7 +62,7 @@ public final class ModInteractionGuard {
         try {
             if (player == null || target == null) return true;
             if (player.hasPermissions(2)) return true;
-            CountryManager mgr = SCountry.countryManager;
+            CountryManager mgr = SCountryServer.countryManager;
             if (mgr == null) return true;
 
             BlockPos pos = target.blockPosition();

@@ -27,3 +27,16 @@ jobs:
 
       - name: Build with Gradle
         run: bash ./gradlew build
+      - name: Upload client JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCountry-client
+          path: client/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Upload server JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCountry-server
+          path: server/build/libs/*.jar
+          if-no-files-found: error

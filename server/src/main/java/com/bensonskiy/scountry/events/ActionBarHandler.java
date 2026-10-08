@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,7 @@ public class ActionBarHandler {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (player.tickCount % 20 != 0) return;
 
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
 
         String dim = CountryManager.dimPath(player.serverLevel());
@@ -37,7 +38,7 @@ public class ActionBarHandler {
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
 
         String name = player.getGameProfile().getName();

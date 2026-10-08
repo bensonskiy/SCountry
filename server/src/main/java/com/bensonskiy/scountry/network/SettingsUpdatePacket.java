@@ -4,6 +4,7 @@ import com.bensonskiy.scountry.SCountry;
 import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
+import com.bensonskiy.scountry.network.CountrySyncBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -121,7 +122,7 @@ public record SettingsUpdatePacket(String country, int action, String a, String 
                     mgr.saveAll();
                 }
             }
-            PacketDistributor.sendToAllPlayers(CountrySyncPacket.collect());
+            PacketDistributor.sendToAllPlayers(CountrySyncBuilder.collect());
         });
     }
 }

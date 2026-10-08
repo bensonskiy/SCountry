@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -45,7 +46,7 @@ public class BorderViewHandler {
         if (!activeViewers.contains(uuid)) return;
         if (player.tickCount % 20 != 0) return;
 
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
 
         String dim = CountryManager.dimPath(player.serverLevel());

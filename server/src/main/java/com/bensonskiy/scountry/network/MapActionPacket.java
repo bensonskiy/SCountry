@@ -4,6 +4,7 @@ import com.bensonskiy.scountry.SCountry;
 import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
+import com.bensonskiy.scountry.network.CountrySyncBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -50,7 +51,7 @@ public record MapActionPacket(String country, boolean add, List<int[]> chunks)
             if (c == null) return;
             if (p.add) mgr.addChunks(c, "overworld", p.chunks);
             else       mgr.removeChunks(c, "overworld", p.chunks);
-            PacketDistributor.sendToAllPlayers(CountrySyncPacket.collect());
+            PacketDistributor.sendToAllPlayers(CountrySyncBuilder.collect());
         });
     }
 }

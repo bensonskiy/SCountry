@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.commands;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.ChatFormatting;
@@ -24,7 +25,7 @@ import java.util.*;
  * Строит и отправляет кликабельный UI настроек страны.
  * Основное меню — в чате; списки взаимодействий (обычные и Create) открываются
  * в виде книги, разбитой по страницам-категориям, чтобы не засорять чат.
- * Все методы статические — доступ через SCountry.countryManager.
+ * Все методы статические — доступ через SCountryServer.countryManager.
  */
 public class SettingsUI {
 
@@ -34,7 +35,7 @@ public class SettingsUI {
     // ==================== ГЛАВНОЕ МЕНЮ ====================
 
     public static void showSettings(ServerPlayer player, String countryName) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -87,7 +88,7 @@ public class SettingsUI {
      *                  либо null — обычный порядок.
      */
     public static void openBook(ServerPlayer player, String countryName, String type, String focusCat) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -107,7 +108,7 @@ public class SettingsUI {
 
     /** Открывает книгу взаимодействий РОЛИ (кнопки Разрешено/Запрещено вместо режимов страны). */
     public static void openRoleBook(ServerPlayer player, String countryName, String roleName, String type, String focusCat) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null || !country.hasCustomRole(roleName)) {
@@ -131,7 +132,7 @@ public class SettingsUI {
     /** Изменение права РОЛИ из книги: применяет и переоткрывает книгу на той же категории. */
     public static void changeRoleSettingBook(ServerPlayer player, String countryName, String roleName,
                                              String type, String cat, String key, boolean value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null || !country.hasCustomRole(roleName)) {
@@ -154,7 +155,7 @@ public class SettingsUI {
     /** Изменение настройки из книги: применяет и переоткрывает книгу на той же категории. */
     public static void changeSettingBook(ServerPlayer player, String countryName,
                                          String type, String cat, String key, String value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -184,7 +185,7 @@ public class SettingsUI {
     /** Ставит режим сразу всем пунктам категории (кнопка «Вся категория» в книге). */
     public static void changeCategoryBook(ServerPlayer player, String countryName,
                                           String type, String cat, String value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -215,7 +216,7 @@ public class SettingsUI {
     /** То же для роли: разрешить или запретить всю категорию разом. */
     public static void changeRoleCategoryBook(ServerPlayer player, String countryName, String roleName,
                                               String type, String cat, boolean value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null || !country.hasCustomRole(roleName)) {
@@ -467,7 +468,7 @@ public class SettingsUI {
     // ==================== ИЗМЕНЕНИЕ НАСТРОЕК (чат) ====================
 
     public static void changeSetting(ServerPlayer player, String countryName, String key, String value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -533,7 +534,7 @@ public class SettingsUI {
     }
 
     public static void changeLock(ServerPlayer player, String countryName, String key, boolean locked) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null) { player.sendSystemMessage(err("Страна не найдена!")); return; }
@@ -557,7 +558,7 @@ public class SettingsUI {
     // ==================== РОЛИ ====================
 
     public static void showRoleSettings(ServerPlayer player, String countryName, String roleName) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null || !country.hasCustomRole(roleName)) {
@@ -601,7 +602,7 @@ public class SettingsUI {
     }
 
     public static void changeRoleSetting(ServerPlayer player, String countryName, String roleName, String perm, boolean value) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country country = mgr.getCountryByName(countryName);
         if (country == null || !country.hasCustomRole(roleName)) {

@@ -47,7 +47,7 @@ public final class ModInteractionGuard {
                     player.getGameProfile().getName(), country.getModInteractMode(key), key);
 
             if (!allowed) {
-                player.sendSystemMessage(Component.literal(Config.messageDenied));
+                player.sendSystemMessage(Component.literal(Config.messageDenied.get()));
                 LOGGER.debug("Mod interaction BLOCKED: {} at {} for {}",
                         key, pos, player.getGameProfile().getName());
             }
@@ -73,7 +73,7 @@ public final class ModInteractionGuard {
             String mode = attack ? country.pvpMode : country.interactMode;
             boolean allowed = country.playerAllowed(
                     player.getGameProfile().getName(), mode, attack ? "pvp" : "interact");
-            if (!allowed) player.sendSystemMessage(Component.literal(Config.messageDenied));
+            if (!allowed) player.sendSystemMessage(Component.literal(Config.messageDenied.get()));
             return allowed;
         } catch (Exception e) {
             LOGGER.error("ModInteractionGuard entity error: " + e.getMessage());

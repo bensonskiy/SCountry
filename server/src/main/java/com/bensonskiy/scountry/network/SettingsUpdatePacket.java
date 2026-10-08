@@ -59,6 +59,8 @@ public record SettingsUpdatePacket(String country, int action, String a, String 
             switch (p.action()) {
                 case 0 -> {
                     if (!admin && !leaderOrDeputy) return;
+                    if (!admin && c.isSettingLocked(p.a())) return;
+                    if ("build".equals(p.a()) && !admin && (c.breakLocked || c.placeLocked)) return;
                     if (!p.b().equals("ALL") && !p.b().equals("ONLY_MEMBERS") && !p.b().equals("NONE")) return;
                     switch (p.a()) {
                         case "pvp"       -> c.pvpMode = p.b();

@@ -1,0 +1,37 @@
+dependencies {
+    implementation project(':common')
+
+    // Create — только для компиляции миксинов и хуков.
+    // В рантайме Create подгружается как обычный мод.
+    compileOnly "maven.modrinth:create:1.21.1-6.0.0"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+}
+
+neoForge {
+    runs {
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+    mods {
+        "${mod_id}server" {
+            sourceSet(sourceSets.main)
+            sourceSet(project(':common').sourceSets.main)
+        }
+    }
+}
+
+tasks.register('deployJar', Jar) {
+    archiveClassifier = 'server'
+    from project(':common').sourceSets.main.output
+    from sourceSets.main.output
+}

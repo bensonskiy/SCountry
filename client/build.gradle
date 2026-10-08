@@ -1,0 +1,36 @@
+repositories {
+    mavenCentral()
+    maven {
+        name = "Curse Maven"
+        url = "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+    // JourneyMap API для 1.21.1 — берётся из CurseForge
+    compileOnly "curse.maven:journeymap-32274:7319284"
+}
+
+neoForge {
+    runs {
+        client {
+            client()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+            sourceSet(project(':common').sourceSets.main)
+        }
+    }
+}
+
+tasks.register('deployJar', Jar) {
+    archiveClassifier = 'client'
+    from project(':common').sourceSets.main.output
+    from sourceSets.main.output
+}

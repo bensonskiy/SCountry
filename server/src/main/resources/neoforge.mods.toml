@@ -1,0 +1,36 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="All Rights Reserved"
+
+[[mods]]
+modId="scountryserver"
+version="${mod_version}"
+displayName="SCountry Server"
+authors="bensonskiy"
+description='''
+SCountry — серверная часть: защита территорий, страны, роли.
+'''
+
+[[mixins]]
+config="scountryserver.mixins.json"
+
+[[dependencies.scountryserver]]
+modId="neoforge"
+type="required"
+versionRange="[21.1,)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies.scountryserver]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="SERVER"
+
+[[dependencies.scountryserver]]
+modId="create"
+type="optional"
+versionRange="[6.0,)"
+ordering="AFTER"
+side="SERVER"

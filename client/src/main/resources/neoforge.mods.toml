@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="All Rights Reserved"
+
+[[mods]]
+modId="scountry"
+version="${mod_version}"
+displayName="SCountry"
+authors="bensonskiy"
+description='''
+SCountry — клиентская часть: карта, GUI, интеграция с JourneyMap.
+'''
+
+[[dependencies.scountry]]
+modId="neoforge"
+type="required"
+versionRange="[21.1,)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.scountry]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="CLIENT"
+
+[[dependencies.scountry]]
+modId="journeymap"
+type="optional"
+versionRange="[1.21.1-6.0.0,)"
+ordering="AFTER"
+side="CLIENT"

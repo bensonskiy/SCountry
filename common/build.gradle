@@ -1,0 +1,9 @@
+dependencies {
+    // common не должен тянуть за собой moddev-зависимости, но т.к. плагин
+    // применён ко всем subprojects, neoForge { version = ... } уже есть.
+}
+
+neoForge {
+    // даже без runs/mod блоков; moddev не создаст никаких задач запуска,
+    // но даст classpath и mappings для компиляции.
+}

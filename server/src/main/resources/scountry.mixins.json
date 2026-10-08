@@ -1,0 +1,18 @@
+{
+  "required": false,
+  "minVersion": "0.8.5",
+  "package": "com.bensonskiy.scountry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "server": [
+    "ArmPlacementPacketMixin",
+    "BlockEntityConfigurationPacketMixin",
+    "EjectorPlacementPacketMixin",
+    "ExtendoGripInteractionPacketMixin",
+    "RadialWrenchMenuSubmitPacketMixin",
+    "SuperGlueRemovalPacketMixin",
+    "SuperGlueSelectionPacketMixin"
+  ],
+  "client": [],
+  "injectors": { "defaultRequire": 0 }
+}

@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="All Rights Reserved"
+
+[[mods]]
+modId="scountry"
+version="${mod_version}"
+displayName="SCountry"
+authors="bensonskiy"
+description='''
+SCountry — мод для Minecraft 1.21.1 на NeoForge.
+'''
+
+[[dependencies.scountry]]
+modId="neoforge"
+type="required"
+versionRange="[21.1,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.scountry]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"

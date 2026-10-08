@@ -1,6 +1,7 @@
 package com.bensonskiy.scountry.network;
 
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -45,7 +46,7 @@ public record SettingsUpdatePacket(String country, int action, String a, String 
     public static void handle(SettingsUpdatePacket p, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (!(ctx.player() instanceof ServerPlayer player)) return;
-            CountryManager mgr = SCountry.countryManager;
+            CountryManager mgr = SCountryServer.countryManager;
             if (mgr == null) return;
             Country c = mgr.getCountryByName(p.country());
             if (c == null) return;

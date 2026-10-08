@@ -2,6 +2,10 @@ name: Build
 
 on: [push, pull_request]
 
+concurrency:
+  group: scountry-build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,4 +26,17 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: bash ./gradlew build
+      - name: Upload client JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCountry-client
+          path: client/build/libs/*.jar
+          if-no-files-found: error
+
+      - name: Upload server JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: SCountry-server
+          path: server/build/libs/*.jar
+          if-no-files-found: error

@@ -11,8 +11,9 @@ repositories {
 
 dependencies {
     implementation project(':common')
-    // JourneyMap API для 1.21.1 — берётся из CurseForge
-    compileOnly "curse.maven:journeymap-32274:7319284"
+    // Локальный API-jar гарантирует, что optional JourneyMap integration компилируется
+    // даже когда Curse Maven недоступен.
+    compileOnly files(rootProject.file("libs/journeymap-api-2.0.0-1.21.1.jar"))
 }
 
 neoForge {

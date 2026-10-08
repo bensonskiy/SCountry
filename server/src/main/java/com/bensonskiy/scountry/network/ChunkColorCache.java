@@ -34,8 +34,11 @@ public final class ChunkColorCache {
     }
 
     public static void respond(ServerPlayer player, ChunkColorRequestPacket req) {
-        int sx = Math.min(req.chunksX(), MAX_CHUNKS_SIDE);
-        int sz = Math.min(req.chunksZ(), MAX_CHUNKS_SIDE);
+        if (req == null || player == null) return;
+        if (req.chunksX() <= 0 || req.chunksZ() <= 0
+                || req.chunksX() > MAX_CHUNKS_SIDE || req.chunksZ() > MAX_CHUNKS_SIDE) return;
+        int sx = req.chunksX();
+        int sz = req.chunksZ();
         ServerLevel level = player.server.overworld();
 
         int w = sx * PX, h = sz * PX;

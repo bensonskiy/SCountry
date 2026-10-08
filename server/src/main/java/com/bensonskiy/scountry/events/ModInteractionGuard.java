@@ -2,6 +2,7 @@ package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.Config;
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.core.BlockPos;
@@ -25,7 +26,7 @@ public final class ModInteractionGuard {
         try {
             if (player == null || pos == null) return true;
             if (player.hasPermissions(2)) return true;
-            CountryManager mgr = SCountry.countryManager;
+            CountryManager mgr = SCountryServer.countryManager;
             if (mgr == null) return true;
 
             String key = forcedKey;
@@ -46,7 +47,7 @@ public final class ModInteractionGuard {
                     player.getGameProfile().getName(), country.getModInteractMode(key), key);
 
             if (!allowed) {
-                player.sendSystemMessage(Component.literal(Config.messageDenied));
+                player.sendSystemMessage(Component.literal(Config.messageDenied.get()));
                 LOGGER.debug("Mod interaction BLOCKED: {} at {} for {}",
                         key, pos, player.getGameProfile().getName());
             }
@@ -61,7 +62,7 @@ public final class ModInteractionGuard {
         try {
             if (player == null || target == null) return true;
             if (player.hasPermissions(2)) return true;
-            CountryManager mgr = SCountry.countryManager;
+            CountryManager mgr = SCountryServer.countryManager;
             if (mgr == null) return true;
 
             BlockPos pos = target.blockPosition();
@@ -72,7 +73,7 @@ public final class ModInteractionGuard {
             String mode = attack ? country.pvpMode : country.interactMode;
             boolean allowed = country.playerAllowed(
                     player.getGameProfile().getName(), mode, attack ? "pvp" : "interact");
-            if (!allowed) player.sendSystemMessage(Component.literal(Config.messageDenied));
+            if (!allowed) player.sendSystemMessage(Component.literal(Config.messageDenied.get()));
             return allowed;
         } catch (Exception e) {
             LOGGER.error("ModInteractionGuard entity error: " + e.getMessage());

@@ -4,6 +4,7 @@ import com.bensonskiy.scountry.SCountry;
 import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
+import com.bensonskiy.scountry.network.CountrySyncBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -44,6 +45,7 @@ public final class ServerNetworkHandler {
     private static void handleMapAction(MapActionPacket p, IPayloadContext ctx) {
         if (!(ctx.player() instanceof ServerPlayer player)) return;
         if (!player.hasPermissions(2)) return;
+        if (p.chunks() == null || p.chunks().size() > 1024) return;
         CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         Country c = mgr.getCountryByName(p.country());
@@ -70,6 +72,8 @@ public final class ServerNetworkHandler {
         switch (p.action()) {
             case 0 -> {
                 if (!admin && !leaderOrDeputy) return;
+                if (!admin && c.isSettingLocked(p.a())) return;
+                if ("build".equals(p.a()) && !admin && (c.breakLocked || c.placeLocked)) return;
                 if (!p.b().equals("ALL") && !p.b().equals("ONLY_MEMBERS") && !p.b().equals("NONE")) return;
                 switch (p.a()) {
                     case "pvp"       -> c.pvpMode = p.b();

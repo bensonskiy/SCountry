@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
@@ -179,10 +181,22 @@ public class CountryManager {
             if (data == null) return;
             if (data.countries != null) {
                 countries = data.countries;
+                playerCountries.clear();
                 for (Map.Entry<String, Country> e : countries.entrySet()) {
-                    e.getValue().name = e.getKey();
-                    for (String member : e.getValue().members.keySet())
-                        indexAdd(member, e.getKey());
+                    Country country = e.getValue();
+                    if (country == null) continue;
+                    country.name = e.getKey();
+                    if (country.members == null) country.members = new HashMap<>();
+                    if (country.chunks == null) country.chunks = new HashSet<>();
+                    if (country.pendingInvites == null) country.pendingInvites = new HashSet<>();
+                    if (country.modSettings == null) country.modSettings = new HashMap<>();
+                    if (country.customRoles == null) country.customRoles = new LinkedHashMap<>();
+                    if (country.leader == null || country.leader.isBlank()) {
+                        LOGGER.warn("[SCountry] У страны {} отсутствует лидер.", e.getKey());
+                    }
+                    for (String member : country.members.keySet()) {
+                        if (member != null && !member.isBlank()) indexAdd(member, e.getKey());
+                    }
                 }
             }
             if (data.playerMainCountry != null) playerMainCountry = data.playerMainCountry;
@@ -209,8 +223,16 @@ public class CountryManager {
             data.playerMainCountry = playerMainCountry;
             data.modRegistry = new LinkedHashMap<>(modRegistry);
             data.colorIndex = colorIndex;
-            try (Writer w = new OutputStreamWriter(new FileOutputStream(dataFile), StandardCharsets.UTF_8)) {
+            File tmp = new File(dataFile.getParentFile(), dataFile.getName() + ".tmp");
+            try (Writer w = new OutputStreamWriter(new FileOutputStream(tmp), StandardCharsets.UTF_8)) {
                 gson.toJson(data, w);
+            }
+            try {
+                Files.move(tmp.toPath(), dataFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING,
+                        StandardCopyOption.ATOMIC_MOVE);
+            } catch (java.nio.file.AtomicMoveNotSupportedException ignored) {
+                Files.move(tmp.toPath(), dataFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (Exception e) {
             LOGGER.error("[SCountry] Ошибка сохранения в {}: {}", dataFile.getAbsolutePath(), e.toString());
@@ -347,7 +369,12 @@ public class CountryManager {
     }
 
     public String getMainCountry(String uuid)              { return playerMainCountry.get(uuid); }
-    public void   setMainCountry(String uuid, String name) { playerMainCountry.put(uuid, name); saveAll(); }
+    public synchronized boolean setMainCountry(String uuid, String name) {
+        if (uuid == null || name == null || !countries.containsKey(name)) return false;
+        playerMainCountry.put(uuid, name);
+        saveAll();
+        return true;
+    }
 
     // ==================== ЧАНКИ ====================
 
@@ -356,6 +383,7 @@ public class CountryManager {
 
     public synchronized List<int[]> addChunks(Country c, String dim, List<int[]> cells) {
         List<int[]> applied = new ArrayList<>();
+        if (c == null || dim == null || cells == null || cells.isEmpty()) return applied;
         for (int[] cell : cells) {
             int x = cell[0], z = cell[1];
             if (c.hasChunk(dim, x, z)) continue;
@@ -370,6 +398,7 @@ public class CountryManager {
 
     public synchronized List<int[]> removeChunks(Country c, String dim, List<int[]> cells) {
         List<int[]> applied = new ArrayList<>();
+        if (c == null || dim == null || cells == null || cells.isEmpty()) return applied;
         for (int[] cell : cells) {
             int x = cell[0], z = cell[1];
             if (!c.hasChunk(dim, x, z)) continue;

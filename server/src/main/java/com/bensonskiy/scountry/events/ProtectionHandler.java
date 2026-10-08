@@ -42,7 +42,7 @@ public class ProtectionHandler {
         return "NONE".equals(c.getBreakMode()) || "NONE".equals(c.getPlaceMode());
     }
 
-    private static void deny(ServerPlayer p) { p.sendSystemMessage(Component.literal(Config.messageDenied)); }
+    private static void deny(ServerPlayer p) { p.sendSystemMessage(Component.literal(Config.messageDenied.get())); }
 
     private static String itemKey(ItemStack stack) {
         if (stack.isEmpty() || stack.getItem() instanceof BlockItem) return null;
@@ -90,7 +90,7 @@ public class ProtectionHandler {
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectRightClickBlock) return;
+        if (!Config.protectRightClickBlock.get()) return;
         if (event.getHand() == net.minecraft.world.InteractionHand.OFF_HAND && event.getItemStack().isEmpty()) return;
 
         BlockPos pos = event.getPos();
@@ -120,7 +120,7 @@ public class ProtectionHandler {
     public void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectUseItem) return;
+        if (!Config.protectUseItem.get()) return;
         String key = itemKey(event.getItemStack());
         if (key == null) return;
         Country c = getCountry(player, player.blockPosition());
@@ -133,7 +133,7 @@ public class ProtectionHandler {
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectLeftClickBlock) return;
+        if (!Config.protectLeftClickBlock.get()) return;
         Country c = getCountry(player, event.getPos());
         if (c != null && !canAccess(player, c, c.getBreakMode(), "break")) {
             event.setCanceled(true); deny(player);
@@ -144,7 +144,7 @@ public class ProtectionHandler {
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         if (!(event.getPlayer() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectBlockBreak) return;
+        if (!Config.protectBlockBreak.get()) return;
         CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
@@ -159,7 +159,7 @@ public class ProtectionHandler {
     public void onAttackEntity(AttackEntityEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectAttackEntity) return;
+        if (!Config.protectAttackEntity.get()) return;
         Entity target = event.getTarget();
         Country c = getCountry(player, target.blockPosition());
         if (c != null && !canAccess(player, c, c.pvpMode, "pvp")) {
@@ -171,7 +171,7 @@ public class ProtectionHandler {
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectEntityInteract) return;
+        if (!Config.protectEntityInteract.get()) return;
         Country c = getCountry(player, event.getTarget().blockPosition());
         if (c != null && !canAccess(player, c, c.interactMode, "interact")) {
             event.setCanceled(true); deny(player);
@@ -182,7 +182,7 @@ public class ProtectionHandler {
     public void onItemPickup(ItemEntityPickupEvent.Pre event) {
         if (!(event.getPlayer() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
-        if (!Config.protectItemPickup) return;
+        if (!Config.protectItemPickup.get()) return;
         Country c = getCountry(player, event.getItemEntity().blockPosition());
         if (c != null && !canAccess(player, c, c.pickupMode, "pickup"))
             event.setCanPickup(TriState.FALSE);
@@ -190,7 +190,7 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void onExplosionDetonate(ExplosionEvent.Detonate event) {
-        if (!Config.protectExplosion) return;
+        if (!Config.protectExplosion.get()) return;
         CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
@@ -204,7 +204,7 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void onPiston(PistonEvent.Pre event) {
         CountryManager mgr = SCountryServer.countryManager;
-        if (mgr == null || !Config.protectBlockBreak) return;
+        if (mgr == null || !Config.protectBlockBreak.get()) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         String dim = CountryManager.dimPath(level);
         try {
@@ -228,7 +228,7 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void onFluidPlace(BlockEvent.FluidPlaceBlockEvent event) {
-        if (!Config.protectBlockBreak) return;
+        if (!Config.protectBlockBreak.get()) return;
         CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
@@ -251,7 +251,7 @@ public class ProtectionHandler {
         if (c == null) return;
 
         if (attacker instanceof ServerPlayer player) {
-            if (isOp(player) || !Config.protectAttackEntity) return;
+            if (isOp(player) || !Config.protectAttackEntity.get()) return;
             boolean isProjectile = event.getSource().getDirectEntity() != null
                     && event.getSource().getDirectEntity() != player;
             if (!isProjectile) return;
@@ -262,7 +262,7 @@ public class ProtectionHandler {
                     event.getSource().getDirectEntity().discard();
             }
         } else if (victim instanceof ServerPlayer targetPlayer && !isOp(targetPlayer)) {
-            if (!Config.protectAttackEntity) return;
+            if (!Config.protectAttackEntity.get()) return;
             if ("NONE".equals(c.pvpMode)) event.setCanceled(true);
         }
     }

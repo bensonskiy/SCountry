@@ -12,7 +12,7 @@ SCountry — серверная часть: защита территорий, �
 '''
 
 [[mixins]]
-config="scountryserver.mixins.json"
+config="scountry.mixins.json"
 
 [[dependencies.scountryserver]]
 modId="neoforge"

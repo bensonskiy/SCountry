@@ -2,6 +2,7 @@ package com.bensonskiy.scountry.events;
 
 import com.bensonskiy.scountry.Config;
 import com.bensonskiy.scountry.SCountry;
+import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,7 @@ public class ProtectionHandler {
     private static boolean isOp(ServerPlayer p) { return p.hasPermissions(2); }
 
     private static Country getCountry(ServerPlayer p, BlockPos pos) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return null;
         return mgr.getCountryByChunk(CountryManager.dimPath(p.serverLevel()), pos.getX() >> 4, pos.getZ() >> 4);
     }
@@ -144,7 +145,7 @@ public class ProtectionHandler {
         if (!(event.getPlayer() instanceof ServerPlayer player)) return;
         if (isOp(player)) return;
         if (!Config.protectBlockBreak) return;
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         Country c = mgr.getCountryByChunk(CountryManager.dimPath(level),
@@ -190,7 +191,7 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void onExplosionDetonate(ExplosionEvent.Detonate event) {
         if (!Config.protectExplosion) return;
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         String dim = CountryManager.dimPath(level);
@@ -202,7 +203,7 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void onPiston(PistonEvent.Pre event) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null || !Config.protectBlockBreak) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         String dim = CountryManager.dimPath(level);
@@ -228,7 +229,7 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void onFluidPlace(BlockEvent.FluidPlaceBlockEvent event) {
         if (!Config.protectBlockBreak) return;
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getLevel() instanceof net.minecraft.server.level.ServerLevel level)) return;
         String dim = CountryManager.dimPath(level);
@@ -239,7 +240,7 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void onLivingHurt(LivingIncomingDamageEvent event) {
-        CountryManager mgr = SCountry.countryManager;
+        CountryManager mgr = SCountryServer.countryManager;
         if (mgr == null) return;
         if (!(event.getEntity().level() instanceof net.minecraft.server.level.ServerLevel level)) return;
         String dim = CountryManager.dimPath(level);

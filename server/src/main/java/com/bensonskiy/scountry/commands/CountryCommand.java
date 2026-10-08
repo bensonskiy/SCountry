@@ -541,8 +541,8 @@ public class CountryCommand {
             country = m.getMainCountryOf(p.getUUID().toString(), p.getGameProfile().getName());
             if (country == null) { fail(ctx, "Вы не в стране!"); return 0; }
         }
-        if (!isLeaderOrDeputy(p, country) && !p.hasPermissions(2)) {
-            fail(ctx, "Приглашать может только лидер или заместитель!"); return 0;
+        if (!p.hasPermissions(2) && !country.roleAllows(p.getGameProfile().getName(), "invite")) {
+            fail(ctx, "У вас нет права приглашать игроков!"); return 0;
         }
         if (country.isMember(inviteeName)) {
             fail(ctx, inviteeName + " уже в стране!"); return 0;
@@ -586,8 +586,8 @@ public class CountryCommand {
             country = m.getMainCountryOf(p.getUUID().toString(), p.getGameProfile().getName());
             if (country == null) { fail(ctx, "Вы не в стране!"); return 0; }
         }
-        if (!isLeaderOrDeputy(p, country) && !p.hasPermissions(2)) {
-            fail(ctx, "Исключать может только лидер или заместитель!"); return 0;
+        if (!p.hasPermissions(2) && !country.roleAllows(p.getGameProfile().getName(), "kick")) {
+            fail(ctx, "У вас нет права исключать игроков!"); return 0;
         }
         if (!country.isMember(target)) { fail(ctx, "Игрок не в стране!"); return 0; }
         if (country.leader.equalsIgnoreCase(target) && !p.hasPermissions(2)) {
@@ -609,6 +609,9 @@ public class CountryCommand {
         if (m == null) { fail(ctx, "Данные не загружены"); return 0; }
         Country c = m.getCountryByName(StringArgumentType.getString(ctx, "country"));
         if (c == null) { fail(ctx, "Страна не найдена!"); return 0; }
+        if (!p.hasPermissions(2) && !c.roleAllows(p.getGameProfile().getName(), "claim")) {
+            fail(ctx, "У вас нет права управлять территорией!"); return 0;
+        }
         String dim = CountryManager.dimPath(p.serverLevel());
         int cx = p.blockPosition().getX() >> 4, cz = p.blockPosition().getZ() >> 4;
         if (add) {

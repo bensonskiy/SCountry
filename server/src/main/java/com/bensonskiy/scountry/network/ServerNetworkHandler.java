@@ -4,6 +4,7 @@ import com.bensonskiy.scountry.SCountry;
 import com.bensonskiy.scountry.SCountryServer;
 import com.bensonskiy.scountry.data.Country;
 import com.bensonskiy.scountry.data.CountryManager;
+import com.bensonskiy.scountry.network.CountrySyncBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
